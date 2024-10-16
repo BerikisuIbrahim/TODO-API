@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginUser, logoutUser, registerUser, updatProfile } from "../controllers/user.js";
+import { getProfile, loginUser, logoutUser, registerUser, updatProfile } from "../controllers/user.js";
 import { userAvatarUpload } from "../middlewares/upload.js";
 
 // Create a routes
@@ -9,6 +9,8 @@ const userRouter = Router();
 userRouter.post('/users/register', registerUser);
 
 userRouter.post('/users/login', loginUser);
+
+userRouter.get('/users/me', getProfile);
 
 userRouter.post('/users/logout', logoutUser);
 userRouter.post('/users/me', userAvatarUpload.single('avatar'), updatProfile)
