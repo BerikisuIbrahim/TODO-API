@@ -1,4 +1,4 @@
-import { registerUserValidator, loginUserValidator } from "../validators/user_validators.js";
+import { registerUserValidator, loginUserValidator, updateProfileValidator } from "../validators/user_validators.js";
 import { UserModel } from "../models/user_models.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -67,14 +67,30 @@ export const loginUser = async (req, res, next) => {
     }
 }
 
- export const getProfile = (re, res, next) => {
-    res.json('User profile');
- }
+ export const getProfile = async (req, res, next) => {
+try {
+    console.log(req.auth.id)
+    // Find authenticated user from database
+    const user = await UserModel
+    .findById(req.auth.id)
+    .select({ password: false });
+    //Respond to request
+    res.json(user);
+} catch (error) {
+    next(error);
+} 
+}
 
 export const logoutUser = (req, res, next) => {
     res.json('User logged out!');
 }
 
 export const updatProfile = (req, res, next) => {
-    res.json('User profile updated!');
+    try {
+        // Validate user input
+        const { error, value } = updateProfileValidator.validate(req.body);
+        res.json('User profile updated!');
+        } catch (error) {
+        next(error);
+    }
 }
