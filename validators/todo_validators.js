@@ -5,7 +5,7 @@ export const addTodoValidator = Joi.object({
      icon: Joi.string().required()
 });
 
-export const updateTodoVlidator = Joi.object({
+export const updateTodoValidator = Joi.object({
     title: Joi.string(),
     icon: Joi.string(),
     completed: Joi.boolean()

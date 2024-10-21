@@ -1,5 +1,5 @@
 import { TodoModel } from "../models/todo_models.js";
-import { addTodoValidator, updateTodoVlidator } from "../validators/todo_validators.js";
+import { addTodoValidator, updateTodoValidator } from "../validators/todo_validators.js";
 
 export const addTodo = async (req, res, next) => {
     try {
@@ -22,10 +22,11 @@ export const addTodo = async (req, res, next) => {
 
 export const getTodos = async (req, res, next) => {
     try {
-        const {filter = "{}", limit = 10, skip = 0 } = req.query;
+        const {filter = "{}", sort = "{}", limit = 10, skip = 0 } = req.query;
         // Fetct todos from database
         const todos = await TodoModel
         .find(JSON.parse(filter))
+        .sort(JSON.parse(sort))
         .limit(limit)
         .skip(skip);
         //Return response
@@ -41,4 +42,30 @@ export const updateTodo = (req, res, next) => {
 
 export const deleteTodo = (req, res, next) => {
     res.json('Todo deleted!');
+}
+
+export const countTodos = async (req, res, next) => {
+   try {
+    const {filter = "{}" } = req.query;
+    //Count todos in database
+    const count = await TodoModel.countDocuments(JSON.parse(filter));
+    //Respond to request
+    res.json({ count });
+   } catch (error) {
+     next(error);
+    
+   }
+
+}
+
+export const getTodoById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        // Get todo by id from database
+        const todo = await TodoModel.findById(id);
+        // Respond to request
+        res.json(todo);
+    } catch (error) {
+        next(error);
+    }
 }

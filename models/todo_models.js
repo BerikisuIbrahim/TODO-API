@@ -10,6 +10,8 @@ const todoSchema = new Schema({
     timestamps: true
 });
 
+todoSchema.index({nme: 'text', tittle: 'text'})
+
 todoSchema.plugin(toJSON);
 
 export const TodoModel = model('Todo', todoSchema);
